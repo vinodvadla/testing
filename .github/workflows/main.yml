@@ -1,0 +1,32 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: "16"
+      - name: Set up SSH key for EC2
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Install SSH Client for EC2
+        run: sudo apt-get install openssh-client
+
+      - name: Deploy to EC2
+        run : |
+               ssh ubuntu@${{ secrets.EC2_HOST}}
+               ls
+               echo "DEPloying EC2 "
+               EOF
